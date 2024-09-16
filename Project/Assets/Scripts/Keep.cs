@@ -167,7 +167,7 @@ public class Keep : MonoBehaviour
     {
         var gob = new GameObject();
 
-        gob.transform.position = pos.position + new Vector3(0, .1f, 0);
+        gob.transform.position = pos.position + new Vector3(0, .25f, 0);
 
         gob.AddComponent<Item>();
 
@@ -175,20 +175,25 @@ public class Keep : MonoBehaviour
 
         gob.name = itemInfo.name;
 
+        var col = gob.AddComponent<BoxCollider2D>();
+        col.isTrigger = true;
+
         gob.tag = "Pickup";
 
         var gobChild = new GameObject();
         gobChild.transform.SetParent(gob.transform);
+        gobChild.transform.localPosition = Vector3.zero;
 
-        var col = gobChild.AddComponent<BoxCollider2D>();
+        var col1 = gobChild.AddComponent<BoxCollider2D>();
+        col1.size /= 10;
 
-        col.isTrigger = true;
 
         //var pCol = gob.AddComponent<PolygonCollider2D>();
 
         //pCol.
 
         var rb = gob.AddComponent<Rigidbody2D>();
+        rb.mass = 5;
 
         var rand = Random.Range(0, 2);
 

@@ -82,6 +82,7 @@ public class LevelGenerator : MonoBehaviour
         {
             var index = Random.Range(0, startingRooms.Length);
 
+            print(grid);
             var newRoom = Instantiate(startingRooms[index], new Vector3(roomX, roomY), Quaternion.identity, grid.transform);
 
             previousRoom = newRoom;

@@ -53,7 +53,7 @@ public class Player : MonoBehaviour
     {
         get
         {
-            if(playerHealth > 0)
+            if (playerHealth > 0)
             {
                 return false;
             }
@@ -133,7 +133,7 @@ public class Player : MonoBehaviour
         Movement();
         timer += Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.E)&&overItem)
+        if (Input.GetKeyDown(KeyCode.E) && overItem)
         {
 
         }
@@ -309,7 +309,8 @@ public class Player : MonoBehaviour
         sr.sprite = deadSprite;
 
         Fader fader = FindObjectOfType<Fader>();
-        fader.ChangeState(Fader.State.fadeOut);
+        if (fader)
+            fader.ChangeState(Fader.State.fadeOut);
 
     }
 
