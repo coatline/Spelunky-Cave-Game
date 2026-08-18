@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Tilemaps;
 
 public class LevelGenerator : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class LevelGenerator : MonoBehaviour
     [SerializeField] GameObject[] startingRooms;
     [SerializeField] GameObject[] endingRooms;
     [SerializeField] GameObject[] otherRooms;
+    [SerializeField] Tilemap tilemap;
+    [SerializeField] TileBase tile;
     [SerializeField] Grid grid;
 
     public int levelWidth;
@@ -65,6 +68,23 @@ public class LevelGenerator : MonoBehaviour
                 }
             }
         }
+
+        int barrierThickness = 10;
+        int levelWidthTiles = (levelWidth * roomWidth);
+        int levelHeightTiles = (levelHeight * roomHeight);
+        for (int x = -1; x < levelWidthTiles + 1; x++)
+            for (int y = 0; y < barrierThickness; y++)
+            {
+                 tilemap.SetTile(new Vector3Int(x - roomWidth / 2, y + roomHeight / 2, 0), tile);
+                tilemap.SetTile(new Vector3Int(x - roomWidth / 2, -levelHeightTiles + (roomHeight) - y - roomHeight / 2, 0), tile);
+            }
+
+        for (int y = -levelHeightTiles + roomHeight; y < roomHeight; y++)
+            for (int x = 0; x < barrierThickness; x++)
+            {
+                tilemap.SetTile(new Vector3Int(-roomWidth / 2 - x, y - roomHeight / 2, 0), tile);
+                tilemap.SetTile(new Vector3Int(levelWidthTiles - roomWidth / 2 + x, y - roomHeight / 2, 0), tile);
+            }
     }
 
     void UpdateGridPos(int roomType)

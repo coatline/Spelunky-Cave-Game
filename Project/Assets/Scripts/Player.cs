@@ -308,9 +308,11 @@ public class Player : MonoBehaviour
 
         sr.sprite = deadSprite;
 
-        Fader fader = FindObjectOfType<Fader>();
+        Fader fader = FindFirstObjectByType<Fader>();
         if (fader)
             fader.ChangeState(Fader.State.fadeOut);
+
+        Keep.I.GameOver();
 
     }
 

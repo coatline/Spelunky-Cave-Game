@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 
 [DefaultExecutionOrder(-400)]
@@ -32,6 +33,8 @@ public class Keep : MonoBehaviour
     #endregion
 
     [SerializeField] TMP_Text dmgTxtPrfb;
+    [SerializeField] TMP_Text diedText;
+    [SerializeField] TMP_Text levelText;
 
     GameObject canvas = null;
 
@@ -45,11 +48,13 @@ public class Keep : MonoBehaviour
         {
             Debug.LogWarning($"There is another instance of {GetType().Name} already in the scene. Deleting this one!");
             DestroyImmediate(gameObject);
+            return;
         }
         else
         {
             instance = this;
             DontDestroyOnLoad(gameObject);
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
     }
 
@@ -78,7 +83,7 @@ public class Keep : MonoBehaviour
 
     public void FindTexts()
     {
-        var texts = FindObjectsOfType<TMP_Text>();
+        var texts = FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
         for (int i = 0; i < texts.Length; i++)
         {
@@ -93,6 +98,12 @@ public class Keep : MonoBehaviour
             else if (texts[i].name == "Bow_Text")
             {
                 bowText = texts[i];
+            }
+            else if (texts[i].name == "You Died Text")
+                diedText = texts[i];
+            else if (texts[i].name == "Level_Text")
+            {
+                levelText = texts[i];
             }
         }
     }
@@ -129,13 +140,20 @@ public class Keep : MonoBehaviour
             canvas = GameObject.FindGameObjectWithTag("World Space Canvas");
         }
 
-        player = FindObjectOfType<Player>();
+        player = FindFirstObjectByType<Player>();
 
         if (level == 1)
         {
             playerHealth = player.maxHealth;
         }
 
+        levelText.text = $"Level: {level}";
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        FindTexts();
+        levelText.text = $"Level: {level}";
     }
 
     public void NewGame()
@@ -148,19 +166,16 @@ public class Keep : MonoBehaviour
         currentWeapon = WeaponGenerator.I.startingWeapon;
         currentBow = BowGenerator.I.startingBow;
         SetText("Weapon", WeaponGenerator.I.startingWeapon.myName);
+
+        levelText.text = $"Level: {level}";
+        gameOver = false;
     }
 
-    public void LevelWasLoaded(Door door)
+    public void LoadNextLevel(Door door)
     {
-        if (door.level == level)
-        {
-            level++;
-            Start();
-        }
-        else
-        {
-            return;
-        }
+        level++;
+        Scene current = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(current.buildIndex);
     }
 
     public void CreateItem(Transform pos)
@@ -211,5 +226,24 @@ public class Keep : MonoBehaviour
             var bowData = BowGenerator.I.getData(index);
             itemInfo.name = bowData.myName;
         }
+    }
+
+    bool gameOver;
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Scene current = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(current.buildIndex);
+            NewGame();
+        }
+    }
+
+    public void GameOver()
+    {
+        diedText.gameObject.SetActive(true);
+        gameOver = true;
     }
 }

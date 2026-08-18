@@ -27,7 +27,7 @@ public class Slime : MonoBehaviour
         ps = GetComponentInChildren<ParticleSystem>();
         a = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
-        player = FindObjectOfType<Player>();
+        player = FindFirstObjectByType<Player>();
         randFactor = Random.Range(0, timeBetweenJumps / 2);
 
         a.speed = Random.Range(.8f, 1.4f);

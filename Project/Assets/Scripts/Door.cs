@@ -1,31 +1,43 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Door : MonoBehaviour
 {
+    [SerializeField] TMP_Text exitText;
     public bool isExit = false;
     bool done = false;
-    public int level;
 
     Player player;
 
     private void Start()
     {
-        player = FindObjectOfType<Player>();
-        level = Keep.I.level;
+        player = FindFirstObjectByType<Player>();
+        exitText.transform.rotation = Quaternion.identity;
+    }
+
+    private void Update()
+    {
+        if (exitText.enabled)
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                NextFloor();
+            }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (Input.GetKeyDown(KeyCode.F) && isExit && collision.gameObject.CompareTag("Player") && !done)
+        if (isExit && collision.gameObject.CompareTag("Player") && !done)
         {
-            if (!done)
-            {
-                NextFloor();
-            }
+            exitText.enabled = true;
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        exitText.enabled = false;
     }
 
     public void NextFloor()
@@ -41,7 +53,7 @@ public class Door : MonoBehaviour
 
         SceneManager.LoadScene(current.buildIndex);
 
-        Keep.I.LevelWasLoaded(this);
+        Keep.I.LoadNextLevel(this);
     }
 
 }
