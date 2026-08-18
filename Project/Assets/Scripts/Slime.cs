@@ -76,7 +76,7 @@ public class Slime : MonoBehaviour
 
         }
 
-        rb.velocity = new Vector2(xVel, randomFactor);
+        rb.linearVelocity = new Vector2(xVel, randomFactor);
     }
 
     private void OnCollisionExit2D(Collision2D collision)

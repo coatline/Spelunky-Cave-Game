@@ -12,7 +12,7 @@ public class Spike : MonoBehaviour
         {
             var rb = collision.gameObject.GetComponentInParent<Rigidbody2D>();
 
-            if (rb.velocity.y < 0)
+            if (rb.linearVelocity.y < 0)
             {
                 Keep.I.NewDamageText(damage, transform, true);
 
@@ -37,7 +37,7 @@ public class Spike : MonoBehaviour
 
             var rb = collision.gameObject.GetComponentInParent<Rigidbody2D>();
 
-            if (rb.velocity.y < 0)
+            if (rb.linearVelocity.y < 0)
             {
                 Keep.I.NewDamageText(damage, transform);
                 script.health -= damage;

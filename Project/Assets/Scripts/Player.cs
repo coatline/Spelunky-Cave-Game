@@ -318,7 +318,7 @@ public class Player : MonoBehaviour
     {
         var newBomb = Instantiate(bombPrefab, transform.position, Quaternion.identity);
 
-        newBomb.GetComponent<Rigidbody2D>().velocity = bombSpeed * transform.forward;
+        newBomb.GetComponent<Rigidbody2D>().linearVelocity = bombSpeed * transform.forward;
 
         newBomb.GetComponent<Bomb>().time = bombTime;
     }
@@ -349,14 +349,14 @@ public class Player : MonoBehaviour
     {
         if (!canMove)
         {
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             return;
         }
 
         float dx = Input.GetAxisRaw("Horizontal");
         bool jump = Input.GetButton("Jump");
 
-        rb.velocity = new Vector2(speed * dx, rb.velocity.y);
+        rb.linearVelocity = new Vector2(speed * dx, rb.linearVelocity.y);
 
         var mousePos = Camera.main.ScreenToViewportPoint(Input.mousePosition);
 
@@ -378,7 +378,7 @@ public class Player : MonoBehaviour
         if (jump && canJump)
         {
             canJump = false;
-            rb.velocity = new Vector2(rb.velocity.x, jumpHeight);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpHeight);
         }
 
         if (Input.GetMouseButtonDown(0))
@@ -418,14 +418,14 @@ public class Player : MonoBehaviour
 
                 if (right)
                 {
-                    newArrow.GetComponent<Rigidbody2D>().velocity = new Vector2(arrowForce.x + Random.Range(-arrowForce.x / 10, arrowForce.x / 5), arrowForce.y + Random.Range(-arrowForce.y / 4f, arrowForce.y / 2f));
+                    newArrow.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(arrowForce.x + Random.Range(-arrowForce.x / 10, arrowForce.x / 5), arrowForce.y + Random.Range(-arrowForce.y / 4f, arrowForce.y / 2f));
                     newArrow.GetComponent<Arrow>().damage = BowDamage;
                 }
 
                 else if (!right)
                 {
                     newArrow.transform.rotation = Quaternion.Euler(0, 0, 180);
-                    newArrow.GetComponent<Rigidbody2D>().velocity = new Vector2(-arrowForce.x + Random.Range(-arrowForce.x / 10, arrowForce.x / 5), arrowForce.y + Random.Range(-arrowForce.y / 4f, arrowForce.y / 2f));
+                    newArrow.GetComponent<Rigidbody2D>().linearVelocity = new Vector2(-arrowForce.x + Random.Range(-arrowForce.x / 10, arrowForce.x / 5), arrowForce.y + Random.Range(-arrowForce.y / 4f, arrowForce.y / 2f));
                     newArrow.GetComponent<Arrow>().damage = BowDamage;
                 }
             }
